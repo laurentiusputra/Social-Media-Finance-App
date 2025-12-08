@@ -10,32 +10,28 @@ class ExplorePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.primaryBackground,
-      // SafeArea bottom: false agar konten bisa discroll sampai bawah navbar
       body: SafeArea(
         bottom: false,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            children: [
-              const SizedBox(height: 30),
-
-              // 1. HEADER
-              Row(
+        child: Column(
+          children: [
+            // 1. HEADER & SEARCH (Ada Padding)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              child: Row(
                 children: [
                   Expanded(
                     child: Container(
-                      height: 45,
+                      height: 40,
                       decoration: BoxDecoration(
                         color: Colors.white.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(30),
+                        borderRadius: BorderRadius.circular(10), // Radius lebih kecil ala IG
                       ),
                       child: const TextField(
                         style: TextStyle(color: Colors.white),
                         decoration: InputDecoration(
                           hintText: "Search",
                           hintStyle: TextStyle(color: Colors.white60),
-                          prefixIcon: Icon(Icons.search, color: Colors.white60),
-                          suffixIcon: Icon(Icons.mic, color: Colors.white60),
+                          prefixIcon: Icon(Icons.search, color: Colors.white60, size: 20),
                           border: InputBorder.none,
                           contentPadding: EdgeInsets.symmetric(vertical: 10),
                         ),
@@ -43,30 +39,25 @@ class ExplorePage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 15),
-
                   GestureDetector(
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => const ExploreSettingsPage(),
-                        ),
+                        MaterialPageRoute(builder: (context) => const ExploreSettingsPage()),
                       );
                     },
-                    child: const Icon(
-                      Icons.settings,
-                      color: Colors.white,
-                      size: 28,
-                    ),
+                    child: const Icon(Icons.settings, color: Colors.white, size: 28),
                   ),
                 ],
               ),
+            ),
 
-              const SizedBox(height: 25),
-
-              // 2. KATEGORI TABS
-              SingleChildScrollView(
+            // 2. KATEGORI TABS
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Row(
                   children: [
                     _buildTab("For You", isActive: true),
@@ -76,91 +67,71 @@ class ExplorePage extends StatelessWidget {
                   ],
                 ),
               ),
+            ),
 
-              const SizedBox(height: 20),
-              Expanded(
-                child: GridView.custom(
-                  padding: const EdgeInsets.only(
-                    bottom: 120,
-                  ), // Biar ngelewatin navbar
-                  gridDelegate: SliverQuiltedGridDelegate(
-                    crossAxisCount: 3, // Bagi layar jadi 3 kolom kecil
-                    mainAxisSpacing: 4,
-                    crossAxisSpacing: 4,
-                    repeatPattern: QuiltedGridRepeatPattern.inverted,
-                    pattern: const [
-                      // Pola Grid (Sesuai gambar kamu):
-                      QuiltedGridTile(
-                        2,
-                        1,
-                      ), // 1. Kotak Panjang (Tinggi 2, Lebar 1)
-                      QuiltedGridTile(1, 1), // 2. Kotak Kecil (1x1)
-                      QuiltedGridTile(1, 1), // 3. Kotak Kecil (1x1)
-                      QuiltedGridTile(
-                        1,
-                        2,
-                      ), // 4. Kotak Lebar (Tinggi 1, Lebar 2)
-                    ],
-                  ),
-                  childrenDelegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      return ClipRRect(
-                        borderRadius: BorderRadius.circular(
-                          10,
-                        ), // Radius sudut gambar
-                        child: Stack(
-                          fit: StackFit.expand,
-                          children: [
-                            Image.network(
-                              "https://picsum.photos/500/500?random=$index",
-                              fit: BoxFit.cover,
-                            ),
-                            // Ikon Tipe Konten (Video/Gallery/Music)
-                            Positioned(
-                              top: 8,
-                              right: 8,
-                              child: Icon(
-                                _getIconForIndex(index),
-                                color: Colors.white,
-                                size: 20,
-                              ),
-                            ),
-                          ],
+            // 3. GRID EXPLORE (FULL WIDTH & SHARP)
+            Expanded(
+              child: GridView.custom(
+                // Padding 0 agar nempel pinggir
+                padding: const EdgeInsets.only(bottom: 80), 
+                gridDelegate: SliverQuiltedGridDelegate(
+                  crossAxisCount: 3, 
+                  mainAxisSpacing: 2, // Jarak tipis 2px
+                  crossAxisSpacing: 2, // Jarak tipis 2px
+                  repeatPattern: QuiltedGridRepeatPattern.inverted,
+                  pattern: const [
+                    // Pola Grid IG (1 Besar, 2 Kecil)
+                    QuiltedGridTile(2, 2), 
+                    QuiltedGridTile(1, 1),
+                    QuiltedGridTile(1, 1), 
+                    QuiltedGridTile(1, 1),
+                    QuiltedGridTile(1, 1),
+                    QuiltedGridTile(1, 1),
+                  ],
+                ),
+                childrenDelegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    return Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        Image.network(
+                          "https://picsum.photos/500/500?random=$index",
+                          fit: BoxFit.cover,
                         ),
-                      );
-                    },
-                    childCount: 40, // Jumlah gambar dummy
-                  ),
+                        // Ikon Video/Reels di pojok kanan atas
+                        if (index % 3 == 0)
+                          const Positioned(
+                            top: 8, right: 8,
+                            child: Icon(Icons.movie, color: Colors.white, size: 20),
+                          ),
+                      ],
+                    );
+                  },
+                  childCount: 40,
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  // Helper untuk ikon acak di pojok gambar
-  IconData _getIconForIndex(int index) {
-    if (index % 3 == 0) return Icons.videocam_rounded; // Ikon Video
-    if (index % 3 == 1) return Icons.music_note; // Ikon Musik
-    return Icons.photo_library_outlined; // Ikon Galeri
-  }
-
   Widget _buildTab(String text, {bool isActive = false}) {
     return Container(
-      margin: const EdgeInsets.only(right: 15),
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      margin: const EdgeInsets.only(right: 10),
+      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 14),
       decoration: BoxDecoration(
-        color: isActive ? Colors.white.withOpacity(0.3) : Colors.transparent,
-        borderRadius: BorderRadius.circular(20),
+        color: isActive ? Colors.white : Colors.transparent,
+        borderRadius: BorderRadius.circular(8), // Radius kotak ala IG
+        border: Border.all(color: Colors.white30),
       ),
       child: Text(
         text,
         style: TextStyle(
-          color: isActive ? Colors.white : Colors.white60,
-          fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
-          fontSize: 15,
+          color: isActive ? Colors.black : Colors.white,
+          fontWeight: FontWeight.bold,
+          fontSize: 13,
         ),
       ),
     );

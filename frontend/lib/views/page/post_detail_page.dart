@@ -14,7 +14,7 @@ class PostDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.primaryBackground, // Background Biru Gelap Konsisten
+      backgroundColor: AppColors.primaryBackground, // Background Biru Gelap 
       appBar: AppBar(
         backgroundColor: AppColors.primaryBackground,
         elevation: 0,
@@ -33,7 +33,7 @@ class PostDetailPage extends StatelessWidget {
       // LISTVIEW BUILDER: Membuat daftar postingan tanpa batas
       body: ListView.builder(
         padding: const EdgeInsets.only(bottom: 50),
-        itemCount: 15, // Misalnya ada 15 postingan di profil
+        itemCount: 15, 
         itemBuilder: (context, index) {
           // INDEX 0 = Postingan yang sedang diklik (Gambar Utama)
           // INDEX > 0 = Postingan selanjutnya di profil
@@ -41,7 +41,7 @@ class PostDetailPage extends StatelessWidget {
           if (index == 0) {
             return _buildPostCard(
               image: imageUrl, 
-              tag: heroTag, // Pakai Hero Animation cuma di post pertama
+              tag: heroTag, 
               caption: "Enjoying the view and analyzing the market! 🚀\n\nFinancial freedom starts with the right mindset. Keep building, keep investing.\n\n#Investment #Life #Crypto"
             );
           } else {
